@@ -16,7 +16,7 @@ namespace Game_Tools_Week4_Editor
 
         //Members
         private List<Models> m_models = new();
-        private Camera m_camera = new(new Vector3(0, 0, 300), 16 / 9);
+        private Camera m_camera = new(new Vector3(0, 0, 30), 16 / 9);
 
         public Level()
         {
@@ -25,7 +25,7 @@ namespace Game_Tools_Week4_Editor
 
         public void LoadContent(ContentManager _content)
         {
-            Models teapot = new(_content, "Sun" , "SunDiffuse", "MyShader", Vector3.Zero, 2.0f);
+            Models teapot = new(_content, "Teapot" , "SunDiffuse", "MyShader", Vector3.Zero, 2.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
             AddModel(teapot);
         }
