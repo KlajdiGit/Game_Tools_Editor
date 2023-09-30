@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Editor.Engine.Interfaces;
 using System.IO;
 using Game_Tools_Week4_Editor;
+using System.Reflection.Metadata.Ecma335;
+using System;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -39,12 +41,36 @@ namespace Game_Tools_Week4_Editor
             AddModel(sunModel);
         }
 
-        public void LoadContent(ContentManager _content)
+        public void LoadPlanet(ContentManager _content)
         {
-            
-            Models teapot = new(_content, "Moon" , "MoonDiffuse", "MyShader", Vector3.Zero, 1.0f);
+            /*foreach (Models model in m_models)
+            {
+                if (model.Mesh.Tag == "Sun")
+                {
+                    return;
+                }
+            }*/
+            Random rand = new Random();
+
+            float x = (float)(rand.NextDouble() * 300 - 150);
+            float y = (float)(rand.NextDouble() * 180 - 90);
+            Vector3 position = new Vector3(x, y, 0.0f);
+
+            Models planetModel = new(_content, "World", "WorldDiffuse", "MyShader", position, 2.0f);
+            planetModel.SetShader(_content.Load<Effect>("MyShader"));
+            AddModel(planetModel);
+        }
+
+        public void LoadContent(ContentManager _content, string _id)
+        {
+
+            if (_id.ToLower().CompareTo("sun") == 0)
+                LoadSun(_content);
+            else if (_id.ToLower().CompareTo("planet") == 0)
+                LoadPlanet(_content);
+            /*Models teapot = new(_content, "Moon" , "MoonDiffuse", "MyShader", Vector3.Zero, 1.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
-            AddModel(teapot);
+            AddModel(teapot);*/
         }
 
         public void AddModel(Models _model)

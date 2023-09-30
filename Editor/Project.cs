@@ -31,13 +31,13 @@ namespace Game_Tools_Week4_Editor.Editor
             }
 
             // Add aa default level
-            AddLevel(_content);
+           // AddLevel(_content, _id);
         }
 
-        public void AddLevel(ContentManager _content)
+        public void AddLevel(ContentManager _content, string _id)
         {
             CurrentLevel = new();
-            CurrentLevel.LoadContent(_content);
+            CurrentLevel.LoadContent(_content, _id);
             Levels.Add(CurrentLevel);
         }
 

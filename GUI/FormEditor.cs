@@ -16,6 +16,8 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
     public partial class FormEditor : Form
     {
         public GameEditor Game { get; set; }
+        private string _id;
+        public string Id { get { return _id; } set { _id = value; } }
 
         public FormEditor()
         {
@@ -30,11 +32,6 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
         {
 
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Game.Exit();
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -69,27 +66,59 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
 
         }
 
-        private void createToolStripMenuItem_Click(object sender, EventArgs e)
+        /* private void createToolStripMenuItem_Click(object sender, EventArgs e)
+         {
+             SaveFileDialog sfd = new();
+             if (sfd.ShowDialog() == DialogResult.OK)
+             {
+                 Game.Project = new(Game.Content, sfd.FileName);
+                 Text = "Our Cool Editor - " + Game.Project.Name;
+                 Game.AdjustAspectRatio();
+             }
+             saveToolStripMenuItem_Click(sender, e);
+         }*/
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           /* string fname = Path.Combine(Game.Project.Folder, Game.Project.Name);
+            using var stream = File.Open(fname, FileMode.Create);
+            using var writer = new BinaryWriter(stream, Encoding.UTF8, false);
+            Game.Project.Serialize(writer);*/
+        }
+
+        private void addSunToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new();
+            Id = "Sun";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                Game.Project = new(Game.Content, sfd.FileName);
+                //Game.Project = new(Game.Content, sfd.FileName, Id);
+                Game.Project.AddLevel(Game.Content, Id);
                 Text = "Our Cool Editor - " + Game.Project.Name;
                 Game.AdjustAspectRatio();
             }
             saveToolStripMenuItem_Click(sender, e);
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addPlanetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string fname = Path.Combine(Game.Project.Folder, Game.Project.Name);
-            using var stream = File.Open(fname, FileMode.Create);
-            using var writer = new BinaryWriter(stream, Encoding.UTF8, false);
-            Game.Project.Serialize(writer);
+            Id = "Planet";
+            SaveFileDialog sfd = new();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                Game.Project.AddLevel(Game.Content, Id);
+                Text = "Our Cool Editor - " + Game.Project.Name;
+                Game.AdjustAspectRatio();
+            }
+            saveToolStripMenuItem_Click(sender, e);
         }
 
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Game.Exit();
+        }
+
+        private void loadToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new();
             ofd.Filter = "OCE Files|*.oce";
@@ -106,28 +135,16 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
             }
         }
 
-        private void addSunToolStripMenuItem_Click(object sender, EventArgs e)
+        private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new();
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 Game.Project = new(Game.Content, sfd.FileName);
                 Text = "Our Cool Editor - " + Game.Project.Name;
-                Game.AdjustAspectRatio();
             }
             saveToolStripMenuItem_Click(sender, e);
-        }
 
-        private void addPlanetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog sfd = new();
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                Game.Project = new(Game.Content, sfd.FileName);
-                Text = "Our Cool Editor - " + Game.Project.Name;
-                Game.AdjustAspectRatio();
-            }
-            saveToolStripMenuItem_Click(sender, e);
         }
     }
 }

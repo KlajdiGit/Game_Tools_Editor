@@ -30,6 +30,10 @@
         {
             menuStrip1 = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             controlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             addSunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,17 +60,45 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exitToolStripMenuItem1 });
+            fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { projectToolStripMenuItem, exitToolStripMenuItem1 });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
+            // projectToolStripMenuItem
+            // 
+            projectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { createToolStripMenuItem, saveToolStripMenuItem, loadToolStripMenuItem });
+            projectToolStripMenuItem.Name = "projectToolStripMenuItem";
+            projectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            projectToolStripMenuItem.Text = "Project";
+            // 
+            // createToolStripMenuItem
+            // 
+            createToolStripMenuItem.Name = "createToolStripMenuItem";
+            createToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            createToolStripMenuItem.Text = "Create";
+            createToolStripMenuItem.Click += createToolStripMenuItem_Click;
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            saveToolStripMenuItem.Text = "Save";
+            // 
+            // loadToolStripMenuItem
+            // 
+            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            loadToolStripMenuItem.Text = "Load";
+            loadToolStripMenuItem.Click += loadToolStripMenuItem_Click_1;
+            // 
             // exitToolStripMenuItem1
             // 
             exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            exitToolStripMenuItem1.Size = new System.Drawing.Size(93, 22);
+            exitToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             exitToolStripMenuItem1.Text = "Exit";
+            exitToolStripMenuItem1.Click += exitToolStripMenuItem1_Click;
             // 
             // controlsToolStripMenuItem
             // 
@@ -78,21 +110,21 @@
             // addSunToolStripMenuItem
             // 
             addSunToolStripMenuItem.Name = "addSunToolStripMenuItem";
-            addSunToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            addSunToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             addSunToolStripMenuItem.Text = "Add Sun";
             addSunToolStripMenuItem.Click += addSunToolStripMenuItem_Click;
             // 
             // addPlanetToolStripMenuItem
             // 
             addPlanetToolStripMenuItem.Name = "addPlanetToolStripMenuItem";
-            addPlanetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            addPlanetToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             addPlanetToolStripMenuItem.Text = "Add Planet";
             addPlanetToolStripMenuItem.Click += addPlanetToolStripMenuItem_Click;
             // 
             // addMoonToolStripMenuItem
             // 
             addMoonToolStripMenuItem.Name = "addMoonToolStripMenuItem";
-            addMoonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            addMoonToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             addMoonToolStripMenuItem.Text = "Add Moon";
             // 
             // statusStrip1
@@ -164,5 +196,9 @@
         private System.Windows.Forms.ToolStripMenuItem addSunToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPlanetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addMoonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
     }
 }
