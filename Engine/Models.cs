@@ -17,6 +17,7 @@ namespace Game_Tools_Week4_Editor
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
         public float Scale { get; set; }
 
+
         // Texturing
         public Texture Texture { get; set; }
 
@@ -71,14 +72,15 @@ namespace Game_Tools_Week4_Editor
         public Matrix GetTransform()
         {
             return Matrix.CreateScale(Scale) *
-                   Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) *
+                   Matrix.CreateRotationY(Rotation.Y) *
                    Matrix.CreateTranslation(Position);
         }
 
-        public void Render(Matrix _view, Matrix _projection)
+        public void Render(Matrix _view, Matrix _projection, float rotationSpeed)
         {
-            m_rotation.X += 0.001f;
-            m_rotation.Y += 0.005f;
+            m_rotation.X = 0.0f;
+            m_rotation.Z = 0.0f;
+            m_rotation.Y += rotationSpeed;
 
             Shader.Parameters["World"].SetValue(GetTransform());
             Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);

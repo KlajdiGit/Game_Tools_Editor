@@ -93,10 +93,10 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
         {
             OpenFileDialog ofd = new();
             ofd.Filter = "OCE Files|*.oce";
-            if(ofd.ShowDialog() == DialogResult.OK)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 using var stream = File.Open(ofd.FileName, FileMode.Open);
-                using var reader = new BinaryReader (stream, Encoding.UTF8, false);
+                using var reader = new BinaryReader(stream, Encoding.UTF8, false);
                 Game.Project = new();
                 Game.Project.Deserialize(reader, Game.Content);
                 Text = "Our Cool Editor - " + Game.Project.Name;
@@ -104,6 +104,30 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
 
 
             }
+        }
+
+        private void addSunToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                Game.Project = new(Game.Content, sfd.FileName);
+                Text = "Our Cool Editor - " + Game.Project.Name;
+                Game.AdjustAspectRatio();
+            }
+            saveToolStripMenuItem_Click(sender, e);
+        }
+
+        private void addPlanetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                Game.Project = new(Game.Content, sfd.FileName);
+                Text = "Our Cool Editor - " + Game.Project.Name;
+                Game.AdjustAspectRatio();
+            }
+            saveToolStripMenuItem_Click(sender, e);
         }
     }
 }

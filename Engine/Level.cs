@@ -17,14 +17,31 @@ namespace Game_Tools_Week4_Editor
         //Members
         private List<Models> m_models = new();
         private Camera m_camera = new(new Vector3(0, 0, 300), 16 / 9);
+        private static float RotationSun = 0.005f;
 
         public Level()
         {
             
         }
 
+        public void LoadSun(ContentManager _content)
+        {
+            foreach(Models model in m_models) 
+            {
+                if(model.Mesh.Tag == "Sun")
+                {
+                    return;
+                }
+            }
+           
+            Models sunModel = new(_content, "Sun", "SunDiffuse", "MyShader", Vector3.Zero, 2.0f);
+            sunModel.SetShader(_content.Load<Effect>("MyShader"));
+            AddModel(sunModel);
+        }
+
         public void LoadContent(ContentManager _content)
         {
+            
             Models teapot = new(_content, "Moon" , "MoonDiffuse", "MyShader", Vector3.Zero, 1.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
             AddModel(teapot);
@@ -39,7 +56,8 @@ namespace Game_Tools_Week4_Editor
         {
             foreach(Models m in m_models)
             {
-                m.Render(m_camera.View, m_camera.Projection);
+                if(m.Mesh.Tag == "Sun")
+                m.Render(m_camera.View, m_camera.Projection, RotationSun);
             }
         }
 
