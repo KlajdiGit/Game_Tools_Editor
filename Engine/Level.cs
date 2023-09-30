@@ -8,6 +8,7 @@ using System.IO;
 using Game_Tools_Week4_Editor;
 using System;
 using Microsoft.Xna.Framework.Media;
+using System.Reflection;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -90,10 +91,21 @@ namespace Game_Tools_Week4_Editor
 
         public void LoadMoon(ContentManager _content)
         {
-            Vector3 pos = new Vector3(150.0f, 150.0f, 150.0f);
-            Models moonModel = new(_content, "Sun", "SunDiffuse", "MyShader", pos, 1.0f);
-            moonModel.SetShader(_content.Load<Effect>("MyShader"));
-            AddModel(moonModel);
+            Random rand = new Random();
+
+            for( int i = m_models.Count - 1; i >= 0; i-- ) 
+            {
+                var model = m_models[i];
+                if (model.Mesh.Tag == "World")
+                {
+                    float scale = (float)(rand.NextDouble() * 0.2d + 0.2d);
+                    //new Vector3(model.Position.X, 0.0f, 0.0f);
+                    Models moonModel = new(_content, "Moon", "MoonDiffuse", "MyShader", new Vector3(model.Position.X + 20.0f, model.Position.Y, model.Position.Z), scale);
+                    moonModel.SetShader(_content.Load<Effect>("MyShader"));
+                    AddModel(moonModel);
+                }
+            }
+            
         }
 
         public void AddModel(Models _model)
@@ -117,7 +129,12 @@ namespace Game_Tools_Week4_Editor
                     //rotate around its own centre, y - axis at a speed of 0.02 to 0.03 units per frame; and
                     rotation = (float)(rand.NextDouble() * 0.01d + 0.02d);
                     m.Render(m_camera.View, m_camera.Projection, new Vector3(0.0f, rotation, 0.0f));
-
+                }
+                else if (m.Mesh.Tag == "Moon")
+                {
+                    // rotate around its own centre, y-axis at a speed of 0.005 to 0.01 units per frame; and
+                    rotation = (float)(rand.NextDouble() * 0.005d + 0.005d);
+                    m.Render(m_camera.View, m_camera.Projection, new Vector3(0.0f, rotation, 0.0f));
                 }
             }
         }
