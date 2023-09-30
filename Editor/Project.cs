@@ -34,10 +34,15 @@ namespace Game_Tools_Week4_Editor.Editor
             AddLevel(_content);
         }
 
+        public void LoadLevel(ContentManager _content, string _id) 
+        {
+            CurrentLevel.LoadContent(_content, _id);
+        }
+
         public void AddLevel(ContentManager _content)
         {
             CurrentLevel = new();
-            CurrentLevel.LoadContent(_content);
+            //CurrentLevel.LoadContent(_content);
             Levels.Add(CurrentLevel);
         }
 

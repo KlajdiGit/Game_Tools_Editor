@@ -23,11 +23,54 @@ namespace Game_Tools_Week4_Editor
             
         }
 
-        public void LoadContent(ContentManager _content)
+        public void LoadContent(ContentManager _content, string _id)
         {
-            Models teapot = new(_content, "Moon" , "MoonDiffuse", "MyShader", Vector3.Zero, 1.0f);
+            /*Models teapot = new(_content, "Moon" , "MoonDiffuse", "MyShader", Vector3.Zero, 1.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
-            AddModel(teapot);
+            AddModel(teapot);*/
+
+            if(_id.ToLower().CompareTo("sun") == 0)
+            {
+                LoadSun(_content);
+            }
+            else if (_id.ToLower().CompareTo("world") == 0)
+            {
+                LoadWorld(_content);
+            }
+            else if (_id.ToLower().CompareTo("moon") == 0)
+            {
+                LoadMoon(_content);
+            }
+            else
+            {
+            }
+        }
+
+        public void LoadSun(ContentManager _content)
+        {
+            foreach(var model in m_models) 
+            {
+                //if(model.Tag == "Sun")
+            }
+
+            Models sunModel = new(_content, "Sun", "SunDiffuse", "MyShader", Vector3.Zero, 1.0f);
+            sunModel.SetShader(_content.Load<Effect>("MyShader"));
+            AddModel(sunModel);
+        }
+        public void LoadWorld(ContentManager _content)
+        {
+            Vector3 pos = new Vector3(100.0f, 100.0f, 100.0f);
+            Models worldModel = new(_content, "Sun", "SunDiffuse", "MyShader", pos, 1.0f);
+            worldModel.SetShader(_content.Load<Effect>("MyShader"));
+            AddModel(worldModel);
+        }
+
+        public void LoadMoon(ContentManager _content)
+        {
+            Vector3 pos = new Vector3(150.0f, 150.0f, 150.0f);
+            Models moonModel = new(_content, "Sun", "SunDiffuse", "MyShader", pos, 1.0f);
+            moonModel.SetShader(_content.Load<Effect>("MyShader"));
+            AddModel(moonModel);
         }
 
         public void AddModel(Models _model)
