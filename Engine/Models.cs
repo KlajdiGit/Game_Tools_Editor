@@ -75,10 +75,10 @@ namespace Game_Tools_Week4_Editor
                    Matrix.CreateTranslation(Position);
         }
 
-        public void Render(Matrix _view, Matrix _projection)
+        public void Render(Matrix _view, Matrix _projection,float _val)
         {
-            m_rotation.X += 0.001f;
-            m_rotation.Y += 0.005f;
+            //m_rotation.X += 0.001f;
+            m_rotation.Y += _val;
 
             Shader.Parameters["World"].SetValue(GetTransform());
             Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
@@ -89,6 +89,7 @@ namespace Game_Tools_Week4_Editor
                 mesh.Draw();
             }
         }
+
 
         public void Serialize(BinaryWriter _stream)
         {

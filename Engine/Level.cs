@@ -50,10 +50,13 @@ namespace Game_Tools_Week4_Editor
         {
             foreach(var model in m_models) 
             {
-                //if(model.Tag == "Sun")
+                if (model.Mesh.Tag == "Sun")
+                {
+                    return;
+                }
             }
 
-            Models sunModel = new(_content, "Sun", "SunDiffuse", "MyShader", Vector3.Zero, 1.0f);
+            Models sunModel = new(_content, "Sun", "SunDiffuse", "MyShader", Vector3.Zero, 2.0f);
             sunModel.SetShader(_content.Load<Effect>("MyShader"));
             AddModel(sunModel);
         }
@@ -78,11 +81,16 @@ namespace Game_Tools_Week4_Editor
             m_models.Add(_model);
         }
 
+       
         public void Render()
         {
             foreach(Models m in m_models)
             {
-                m.Render(m_camera.View, m_camera.Projection);
+                if(m.Mesh.Tag == "Sun")
+                {
+                    m.Render(m_camera.View, m_camera.Projection, 0.005f);
+
+                }
             }
         }
 
