@@ -75,10 +75,10 @@ namespace Game_Tools_Week4_Editor
                    Matrix.CreateTranslation(Position);
         }
 
-        public void Render(Matrix _view, Matrix _projection,float _val)
+        public void Render(Matrix _view, Matrix _projection,Vector3 _vec)
         {
             //m_rotation.X += 0.001f;
-            m_rotation.Y += _val;
+            m_rotation.Y += _vec.Y;
 
             Shader.Parameters["World"].SetValue(GetTransform());
             Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
