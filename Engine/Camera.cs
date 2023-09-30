@@ -32,7 +32,7 @@ namespace Game_Tools_Week4_Editor
             Position = _position;
             AspectRatio = _aspectRatio;
             View = Matrix.CreateLookAt(Position,
-                new Vector3(0, 0, 0),
+                new Vector3(0, 0, 300),
                 Vector3.Up);
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45),
                                                               AspectRatio,
