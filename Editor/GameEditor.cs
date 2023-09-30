@@ -59,7 +59,7 @@ namespace Game_Tools_Week4_Editor.Editor
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Bisque);
+            GraphicsDevice.Clear(Color.Black);
 
             if (Project != null) Project.Render();
             base.Draw(gameTime);
