@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Content;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
+using System;
+using System.Diagnostics.Eventing.Reader;
+using System.Reflection.Metadata;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -77,16 +80,61 @@ namespace Game_Tools_Week4_Editor
 
         public void Render(Matrix _view, Matrix _projection,Vector3 _vec)
         {
-            //m_rotation.X += 0.001f;
-            m_rotation.Y += _vec.Y;
-
-            Shader.Parameters["World"].SetValue(GetTransform());
-            Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
-            Shader.Parameters["Texture"].SetValue(Texture);
-
-            foreach(ModelMesh mesh in Mesh.Meshes)
+            if (this.Mesh.Tag == "Sun")
             {
-                mesh.Draw();
+                m_rotation.Y += _vec.Y;
+
+                Shader.Parameters["World"].SetValue(GetTransform());
+                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+                Shader.Parameters["Texture"].SetValue(Texture);
+
+                foreach (ModelMesh mesh in Mesh.Meshes)
+                {
+                    mesh.Draw();
+                }
+            }
+            else
+            {
+                m_rotation.Y += _vec.Y;
+
+                Vector3 originalDistance = m_position - Vector3.Zero;
+                originalDistance.Normalize();
+                float dot = Vector3.Dot(originalDistance, Position); // Calculate the dot product
+
+                float cosine = dot;
+                float sine = 1.0f - dot * dot;
+
+                if(cosine > 0 && sine >0 )
+                {
+                    m_position.Y += 0.5f;
+                    m_position.X -= 0.5f;
+                }
+
+                else if (cosine < 0 && sine > 0)
+                {
+                    m_position.Y -= 0.5f;
+                    m_position.X -= 0.5f;
+                }
+
+                else if (cosine < 0 && sine < 0)
+                {
+                    m_position.Y -= 0.5f;
+                    m_position.X += 0.5f;
+                }
+                else if (cosine > 0 && sine < 0)
+                {
+                    m_position.Y += 0.5f;
+                    m_position.X += 0.5f;
+                }
+
+                Shader.Parameters["World"].SetValue(GetTransform());
+                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+                Shader.Parameters["Texture"].SetValue(Texture);
+
+                foreach (ModelMesh mesh in Mesh.Meshes)
+                {
+                    mesh.Draw();
+                }
             }
         }
 
