@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Editor.Engine;
+//using SharpDX.Direct2D1;
 
 namespace Game_Tools_Week4_Editor.Editor
 {
@@ -55,6 +56,7 @@ namespace Game_Tools_Week4_Editor.Editor
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            Models.SetGameTime(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

@@ -9,6 +9,7 @@ using Game_Tools_Week4_Editor;
 using System;
 using Microsoft.Xna.Framework.Media;
 using System.Reflection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -20,6 +21,19 @@ namespace Game_Tools_Week4_Editor
         //Members
         private List<Models> m_models = new();
         private Camera m_camera = new(new Vector3(0, 0, 300), 16 / 9);
+
+        public static List<Models> worlds = new();
+        public void AddWorlds()
+        {
+            for (int i = m_models.Count - 1; i >= 0; i--)
+            {
+                Models model = m_models[i];
+                if (model.Mesh.Tag == "World")
+                {
+                    worlds.Add(model);
+                }
+            }
+        }
 
         public Level()
         {

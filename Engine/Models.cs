@@ -20,6 +20,18 @@ namespace Game_Tools_Week4_Editor
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
         public float Scale { get; set; }
 
+        private static GameTime _gameTime;
+
+        public GameTime GetGameTime()
+        {
+            return _gameTime;
+        }
+
+        public static void SetGameTime(GameTime gameTime)
+        {
+            _gameTime = gameTime; 
+        }
+
         // Texturing
         public Texture Texture { get; set; }
 
@@ -93,39 +105,22 @@ namespace Game_Tools_Week4_Editor
                     mesh.Draw();
                 }
             }
-            else
+            else if(this.Mesh.Tag == "World")
             {
+                Random random = new Random();
+
                 m_rotation.Y += _vec.Y;
 
-                Vector3 originalDistance = m_position - Vector3.Zero;
-                originalDistance.Normalize();
-                float dot = Vector3.Dot(originalDistance, Position); // Calculate the dot product
+                //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
+                float speed = 0.1f;
+                Vector3 origin = Vector3.Zero; // change this if you want your circle's origin elsewhere
+                float angle = (float)_gameTime.TotalGameTime.TotalSeconds;
+                float radius = Vector3.Distance(Position, origin);
 
-                float cosine = dot;
-                float sine = 1.0f - dot * dot;
 
-                if(cosine > 0 && sine >0 )
-                {
-                    m_position.Y += 0.5f;
-                    m_position.X -= 0.5f;
-                }
-
-                else if (cosine < 0 && sine > 0)
-                {
-                    m_position.Y -= 0.5f;
-                    m_position.X -= 0.5f;
-                }
-
-                else if (cosine < 0 && sine < 0)
-                {
-                    m_position.Y -= 0.5f;
-                    m_position.X += 0.5f;
-                }
-                else if (cosine > 0 && sine < 0)
-                {
-                    m_position.Y += 0.5f;
-                    m_position.X += 0.5f;
-                }
+                m_position.X = (float)(Math.Cos(angle * speed) * radius + origin.X);
+                m_position.Y = (float)(Math.Sin(angle * speed) * radius + origin.Y);
+                m_position.Z = 0.0f; // change this if you want your object to move in 3D space
 
                 Shader.Parameters["World"].SetValue(GetTransform());
                 Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
@@ -136,8 +131,30 @@ namespace Game_Tools_Week4_Editor
                     mesh.Draw();
                 }
             }
-        }
+            else if(this.Mesh.Tag == "Moon")
+            { /*
+                    Models world = Level.worlds[0];
 
+                    // Get the parent world's position
+                    Vector3 parentPosition = world.Position; // Assuming you have a reference to the parent world object
+                                               // Set the moon's position to be 20 units away from the parent in the X direction
+                    m_position += parentPosition;
+                    // Rotate the moon around its own axis
+                    m_rotation.Y += _vec.Y;
+               
+
+               
+                // Set the shader parameters
+                Shader.Parameters["World"].SetValue(GetTransform());
+                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+                Shader.Parameters["Texture"].SetValue(Texture);
+                // Draw the moon
+                foreach (ModelMesh mesh in Mesh.Meshes)
+                {
+                    mesh.Draw();
+                }*/
+            }
+        }
 
         public void Serialize(BinaryWriter _stream)
         {
@@ -161,3 +178,35 @@ namespace Game_Tools_Week4_Editor
         }
     }
 }
+
+
+/* Vector3 distance = m_position - Vector3.Zero;
+                distance.Normalize();
+                float dot = Vector3.Dot(distance, Vector3.Right); // Calculate the dot product
+
+                float cosine = dot;
+                float sine = (float)Math.Sqrt(1.0f - dot * dot); //1.0f - dot * dot;
+
+                if(cosine > 0 && sine >0 )
+                {
+                    m_position.Y += 0.5f;
+                    m_position.X -= 0.5f;
+                }
+
+                if (cosine < 0 && sine > 0)
+                {
+                    m_position.Y -= 0.5f;
+                    m_position.X -= 0.5f;
+                }
+
+                if (cosine < 0 && sine < 0)
+                {
+                    m_position.Y -= 0.5f;
+                    m_position.X += 0.5f;
+                }
+
+                if (cosine > 0 && sine < 0)
+                {
+                    m_position.Y += 0.5f;
+                    m_position.X += 0.5f;
+                }*/
