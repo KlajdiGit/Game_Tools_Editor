@@ -113,19 +113,19 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
         private void addSunToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Id = "Sun";
-            Game.Project.LoadLevel(Game.Content, Id);
+            Game.Project.LoadLevelContents(Game.Content, Id);
         }
 
         private void addPlanetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Id = "World";
-            Game.Project.LoadLevel(Game.Content, Id);
+            Game.Project.LoadLevelContents(Game.Content, Id);
         }
 
         private void addMoonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Id = "Moon";
-            Game.Project.LoadLevel(Game.Content, Id);
+            Game.Project.LoadLevelContents(Game.Content, Id);
         }
     }
 }

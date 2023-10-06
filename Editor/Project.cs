@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
 using Editor.Engine.Interfaces;
+using Microsoft.Xna.Framework;
 
 namespace Game_Tools_Week4_Editor.Editor
 {
@@ -30,11 +31,11 @@ namespace Game_Tools_Week4_Editor.Editor
                 Name += ".oce";
             }
 
-            // Add aa default level
+            // Add a default level
             AddLevel(_content);
         }
 
-        public void LoadLevel(ContentManager _content, string _id) 
+        public void LoadLevelContents(ContentManager _content, string _id) 
         {
             CurrentLevel.LoadContent(_content, _id);
         }
@@ -46,9 +47,9 @@ namespace Game_Tools_Week4_Editor.Editor
             Levels.Add(CurrentLevel);
         }
 
-        public void Render()
+        public void Render(GameTime gameTime)
         {
-            CurrentLevel.Render();
+            CurrentLevel.Render(gameTime);
         }
 
         public void Serialize(BinaryWriter _stream)

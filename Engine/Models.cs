@@ -8,6 +8,7 @@ using Editor.Engine;
 using System;
 using System.Diagnostics.Eventing.Reader;
 using System.Reflection.Metadata;
+using System.Diagnostics;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -18,19 +19,9 @@ namespace Game_Tools_Week4_Editor
         public Effect Shader { get; set; }
         public Vector3 Position { get => m_position; set { m_position = value; } }
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
+        public float ElapsedTime { get; set; }
+
         public float Scale { get; set; }
-
-        private static GameTime _gameTime;
-
-        public GameTime GetGameTime()
-        {
-            return _gameTime;
-        }
-
-        public static void SetGameTime(GameTime gameTime)
-        {
-            _gameTime = gameTime; 
-        }
 
         // Texturing
         public Texture Texture { get; set; }
@@ -90,22 +81,61 @@ namespace Game_Tools_Week4_Editor
                    Matrix.CreateTranslation(Position);
         }
 
-        public void Render(Matrix _view, Matrix _projection,Vector3 _vec)
+
+        public void RenderMovingObjects(Matrix _view, Matrix _projection, Vector3 _vec, Vector3 _origin, float _angle)
         {
-            if (this.Mesh.Tag == "Sun")
+            Random random = new Random();
+
+            m_rotation.Y += _vec.Y;
+
+            //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
+            float speed = 0.1f;
+            float angle = _angle;
+            //float radius = Vector3.Distance(Position, _origin);
+            float radius = 50.0f; // Set an appropriate initial radius for the circular orbit
+
+
+            float x = (float)(Math.Cos(angle * speed) * radius + _origin.X);
+            float y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
+            m_position = new Vector3(x, y, _origin.Z);
+
+            Debug.WriteLine($"Origin: x= {_origin.X}, y={_origin.Y}, z= {_origin.Z}");
+            Debug.WriteLine($"Position: x= {m_position.X}, y={m_position.Y}, z= {m_position.Z}");
+
+
+            /* m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X);
+             m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
+             m_position.Z = _origin.Z;*/
+
+            Shader.Parameters["World"].SetValue(GetTransform());
+            Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+            Shader.Parameters["Texture"].SetValue(Texture);
+            foreach (ModelMesh mesh in Mesh.Meshes)
             {
-                m_rotation.Y += _vec.Y;
-
-                Shader.Parameters["World"].SetValue(GetTransform());
-                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
-                Shader.Parameters["Texture"].SetValue(Texture);
-
-                foreach (ModelMesh mesh in Mesh.Meshes)
-                {
-                    mesh.Draw();
-                }
+                mesh.Draw();
             }
-            else if(this.Mesh.Tag == "World")
+        }
+
+        public void Render(Matrix _view, Matrix _projection, Vector3 _vec)
+        {
+            //  if (this.Mesh.Tag == "Sun")
+            // {
+            m_rotation.Y += _vec.Y;
+
+            Shader.Parameters["World"].SetValue(GetTransform());
+            Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+            Shader.Parameters["Texture"].SetValue(Texture);
+
+            foreach (ModelMesh mesh in Mesh.Meshes)
+            {
+                mesh.Draw();
+            }
+            // }
+        }
+      
+
+
+          /*  else if(this.Mesh.Tag == "World")
             {
                 Random random = new Random();
 
@@ -113,48 +143,52 @@ namespace Game_Tools_Week4_Editor
 
                 //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
                 float speed = 0.1f;
-                Vector3 origin = Vector3.Zero; // change this if you want your circle's origin elsewhere
-                float angle = (float)_gameTime.TotalGameTime.TotalSeconds;
-                float radius = Vector3.Distance(Position, origin);
+                float angle = _angle;
+                float radius = Vector3.Distance(Position, _origin);
 
 
-                m_position.X = (float)(Math.Cos(angle * speed) * radius + origin.X);
-                m_position.Y = (float)(Math.Sin(angle * speed) * radius + origin.Y);
-                m_position.Z = 0.0f; // change this if you want your object to move in 3D space
+                m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X);
+                m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
+                m_position.Z = _origin.Z; 
 
                 Shader.Parameters["World"].SetValue(GetTransform());
                 Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
                 Shader.Parameters["Texture"].SetValue(Texture);
+                foreach (ModelMesh mesh in Mesh.Meshes)
+                {
+                    mesh.Draw();
+                }
+            }*/
 
+
+            /*else if(this.Mesh.Tag == "Moon")
+            {
+                Random random = new Random();
+
+                m_rotation.Y += _vec.Y;
+
+                //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
+                float speed = 0.2f;
+                float angle = _angle;
+                float radius = Vector3.Distance(Position, _origin);
+
+
+                m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X) ;
+                m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
+                m_position.Z = (float)(Math.Sin(angle * speed) * radius + _origin.Z);
+
+                Shader.Parameters["World"].SetValue(GetTransform());
+                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
+                Shader.Parameters["Texture"].SetValue(Texture);
                 foreach (ModelMesh mesh in Mesh.Meshes)
                 {
                     mesh.Draw();
                 }
             }
-            else if(this.Mesh.Tag == "Moon")
-            { /*
-                    Models world = Level.worlds[0];
-
-                    // Get the parent world's position
-                    Vector3 parentPosition = world.Position; // Assuming you have a reference to the parent world object
-                                               // Set the moon's position to be 20 units away from the parent in the X direction
-                    m_position += parentPosition;
-                    // Rotate the moon around its own axis
-                    m_rotation.Y += _vec.Y;
-               
-
-               
-                // Set the shader parameters
-                Shader.Parameters["World"].SetValue(GetTransform());
-                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
-                Shader.Parameters["Texture"].SetValue(Texture);
-                // Draw the moon
-                foreach (ModelMesh mesh in Mesh.Meshes)
-                {
-                    mesh.Draw();
-                }*/
-            }
-        }
+            else 
+            {
+            }*/
+        
 
         public void Serialize(BinaryWriter _stream)
         {
