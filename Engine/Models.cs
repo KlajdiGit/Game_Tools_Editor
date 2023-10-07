@@ -19,18 +19,32 @@ namespace Game_Tools_Week4_Editor
         public Effect Shader { get; set; }
         public Vector3 Position { get => m_position; set { m_position = value; } }
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
-        public float ElapsedTime { get; set; }
+        public float ElapsedTime  { get; set; }
 
         public float Scale { get; set; }
 
         // Texturing
         public Texture Texture { get; set; }
 
+        private float m_speed;
+
+        public float GetSpeed()
+        {
+            return m_speed;
+        }
+
+        public void SetSpeed(float _speed)
+        {
+            m_speed = _speed;
+        }
+
         //Members
         private Vector3 m_position;
         private Vector3 m_rotation;
+        
 
-        public Models()
+
+    public Models()
         {
         }
 
@@ -39,7 +53,8 @@ namespace Game_Tools_Week4_Editor
                        string _texture,
                        string _effect,
                        Vector3 _position,
-                       float _scale)
+                       float _scale
+                       )
         {
             Create(_content, _model, _texture, _effect, _position, _scale);
         }
@@ -88,24 +103,18 @@ namespace Game_Tools_Week4_Editor
 
             m_rotation.Y += _vec.Y;
 
-            //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
+            //Hard-coded value for speed so the rotation can be fast
             float speed = 0.1f;
             float angle = _angle;
-            //float radius = Vector3.Distance(Position, _origin);
-            float radius = 50.0f; // Set an appropriate initial radius for the circular orbit
+            float radius = Vector3.Distance(Position, _origin);
 
 
-            float x = (float)(Math.Cos(angle * speed) * radius + _origin.X);
-            float y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
+            float x = (float)(Math.Cos(angle * /*m_speed*/  speed) * radius + _origin.X);
+            float y = (float)(Math.Sin(angle * /*m_speed*/  speed) * radius + _origin.Y);
             m_position = new Vector3(x, y, _origin.Z);
 
             Debug.WriteLine($"Origin: x= {_origin.X}, y={_origin.Y}, z= {_origin.Z}");
             Debug.WriteLine($"Position: x= {m_position.X}, y={m_position.Y}, z= {m_position.Z}");
-
-
-            /* m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X);
-             m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
-             m_position.Z = _origin.Z;*/
 
             Shader.Parameters["World"].SetValue(GetTransform());
             Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
@@ -118,8 +127,7 @@ namespace Game_Tools_Week4_Editor
 
         public void Render(Matrix _view, Matrix _projection, Vector3 _vec)
         {
-            //  if (this.Mesh.Tag == "Sun")
-            // {
+            
             m_rotation.Y += _vec.Y;
 
             Shader.Parameters["World"].SetValue(GetTransform());
@@ -130,65 +138,7 @@ namespace Game_Tools_Week4_Editor
             {
                 mesh.Draw();
             }
-            // }
-        }
-      
-
-
-          /*  else if(this.Mesh.Tag == "World")
-            {
-                Random random = new Random();
-
-                m_rotation.Y += _vec.Y;
-
-                //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
-                float speed = 0.1f;
-                float angle = _angle;
-                float radius = Vector3.Distance(Position, _origin);
-
-
-                m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X);
-                m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
-                m_position.Z = _origin.Z; 
-
-                Shader.Parameters["World"].SetValue(GetTransform());
-                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
-                Shader.Parameters["Texture"].SetValue(Texture);
-                foreach (ModelMesh mesh in Mesh.Meshes)
-                {
-                    mesh.Draw();
-                }
-            }*/
-
-
-            /*else if(this.Mesh.Tag == "Moon")
-            {
-                Random random = new Random();
-
-                m_rotation.Y += _vec.Y;
-
-                //float speed = (float)random.NextDouble() * 0.01f + 0.01f;
-                float speed = 0.2f;
-                float angle = _angle;
-                float radius = Vector3.Distance(Position, _origin);
-
-
-                m_position.X = (float)(Math.Cos(angle * speed) * radius + _origin.X) ;
-                m_position.Y = (float)(Math.Sin(angle * speed) * radius + _origin.Y);
-                m_position.Z = (float)(Math.Sin(angle * speed) * radius + _origin.Z);
-
-                Shader.Parameters["World"].SetValue(GetTransform());
-                Shader.Parameters["WorldViewProjection"].SetValue(GetTransform() * _view * _projection);
-                Shader.Parameters["Texture"].SetValue(Texture);
-                foreach (ModelMesh mesh in Mesh.Meshes)
-                {
-                    mesh.Draw();
-                }
-            }
-            else 
-            {
-            }*/
-        
+        }      
 
         public void Serialize(BinaryWriter _stream)
         {
@@ -213,34 +163,3 @@ namespace Game_Tools_Week4_Editor
     }
 }
 
-
-/* Vector3 distance = m_position - Vector3.Zero;
-                distance.Normalize();
-                float dot = Vector3.Dot(distance, Vector3.Right); // Calculate the dot product
-
-                float cosine = dot;
-                float sine = (float)Math.Sqrt(1.0f - dot * dot); //1.0f - dot * dot;
-
-                if(cosine > 0 && sine >0 )
-                {
-                    m_position.Y += 0.5f;
-                    m_position.X -= 0.5f;
-                }
-
-                if (cosine < 0 && sine > 0)
-                {
-                    m_position.Y -= 0.5f;
-                    m_position.X -= 0.5f;
-                }
-
-                if (cosine < 0 && sine < 0)
-                {
-                    m_position.Y -= 0.5f;
-                    m_position.X += 0.5f;
-                }
-
-                if (cosine > 0 && sine < 0)
-                {
-                    m_position.Y += 0.5f;
-                    m_position.X += 0.5f;
-                }*/
