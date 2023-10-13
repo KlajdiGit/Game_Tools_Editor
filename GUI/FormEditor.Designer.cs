@@ -38,9 +38,11 @@
             statusStrip1 = new System.Windows.Forms.StatusStrip();
             toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             splitContainer = new System.Windows.Forms.SplitContainer();
+            propertyGrid = new System.Windows.Forms.PropertyGrid();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
+            splitContainer.Panel2.SuspendLayout();
             splitContainer.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,35 +68,35 @@
             // 
             exitToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { createToolStripMenuItem, saveToolStripMenuItem, loadToolStripMenuItem });
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             exitToolStripMenuItem.Text = "Project";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // createToolStripMenuItem
             // 
             createToolStripMenuItem.Name = "createToolStripMenuItem";
-            createToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             createToolStripMenuItem.Text = "Create";
             createToolStripMenuItem.Click += createToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            saveToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            loadToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem1
             // 
             exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            exitToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            exitToolStripMenuItem1.Size = new System.Drawing.Size(111, 22);
             exitToolStripMenuItem1.Text = "Exit";
             // 
             // statusStrip1
@@ -125,10 +127,19 @@
             // 
             // splitContainer.Panel2
             // 
+            splitContainer.Panel2.Controls.Add(propertyGrid);
             splitContainer.Panel2.Paint += splitContainer1_Panel2_Paint;
             splitContainer.Size = new System.Drawing.Size(800, 404);
-            splitContainer.SplitterDistance = 330;
+            splitContainer.SplitterDistance = 653;
             splitContainer.TabIndex = 2;
+            // 
+            // propertyGrid
+            // 
+            propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            propertyGrid.Location = new System.Drawing.Point(0, 0);
+            propertyGrid.Name = "propertyGrid";
+            propertyGrid.Size = new System.Drawing.Size(143, 404);
+            propertyGrid.TabIndex = 0;
             // 
             // FormEditor
             // 
@@ -148,6 +159,7 @@
             menuStrip1.PerformLayout();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
             splitContainer.ResumeLayout(false);
             ResumeLayout(false);
@@ -166,5 +178,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
+        public System.Windows.Forms.PropertyGrid propertyGrid;
     }
 }

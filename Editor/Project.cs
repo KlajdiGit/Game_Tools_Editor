@@ -46,6 +46,11 @@ namespace Game_Tools_Week4_Editor.Editor
             CurrentLevel.Render();
         }
 
+        public void Update(float _delta)
+        {
+            CurrentLevel?.Update(_delta);
+        }
+
         public void Serialize(BinaryWriter _stream)
         {
             _stream.Write(Levels.Count);

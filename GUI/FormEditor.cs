@@ -8,19 +8,71 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using System.Text;
 using Game_Tools_Week4_Editor.Editor;
+using Microsoft.Xna.Framework;
 
 namespace Game_Tools_Week4_Editor /*GUI.Editor*/
 {
     public partial class FormEditor : Form
     {
-        public GameEditor Game { get; set; }
+        public GameEditor Game { get => m_game; set { m_game = value; HookEvents(); } }
 
+        private GameEditor m_game = null;
         public FormEditor()
         {
             InitializeComponent();
+            KeyPreview = true;
         }
+
+        private void HookEvents()
+        {
+            Form gameForm = Control.FromHandle(m_game.Window.Handle) as Form;
+            gameForm.MouseDown += GameForm_MouseDown;
+            gameForm.MouseUp += GameForm_MouseUp;
+            gameForm.MouseWheel += GameForm_MouseWheel;
+            gameForm.MouseMove += GameForm_MouseMove;
+            KeyDown += GameForm_KeyDown;
+            KeyUp += GameForm_KeyUp;
+        }
+
+        private void GameForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            var p = new Vector2(e.Location.X, e.Location.Y);
+            InputController.Instance.MousePosition = p;
+
+        }
+
+        private void GameForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            InputController.Instance.SetWheel(e.Delta / SystemInformation.MouseWheelScrollDelta);
+        }
+
+        private void GameForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            InputController.Instance.SetButtonUp(e.Button);
+            var p = new Vector2(e.Location.X, e.Location.Y);
+            InputController.Instance.DragEnd = p;
+        }
+
+        private void GameForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            InputController.Instance.SetButtonDown(e.Button);
+            var p = new Vector2(e.Location.X, e.Location.Y);
+            InputController.Instance.DragStart = p;
+        }
+
+        private void GameForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            InputController.Instance.SetKeyUp(e.KeyCode);
+            e.Handled = true;
+        }
+
+        private void GameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            InputController.Instance.SetKeyDown(e.KeyCode);
+            e.Handled = true;
+        }
+
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
@@ -93,10 +145,10 @@ namespace Game_Tools_Week4_Editor /*GUI.Editor*/
         {
             OpenFileDialog ofd = new();
             ofd.Filter = "OCE Files|*.oce";
-            if(ofd.ShowDialog() == DialogResult.OK)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 using var stream = File.Open(ofd.FileName, FileMode.Open);
-                using var reader = new BinaryReader (stream, Encoding.UTF8, false);
+                using var reader = new BinaryReader(stream, Encoding.UTF8, false);
                 Game.Project = new();
                 Game.Project.Deserialize(reader, Game.Content);
                 Text = "Our Cool Editor - " + Game.Project.Name;
