@@ -6,21 +6,122 @@ using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Game_Tools_Week4_Editor
 {
+
+    public enum TextureVal
+    {
+        Metal,
+        Grass,
+        HeightMap
+
+    }
+
+    public class TextureValConverter : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            return new StandardValuesCollection(new List<string> { "Metal", "Grass", "HeightMap" });
+        }
+    }
+
     class Models : ISerializable, INotifyPropertyChanged
     {
-        // Accessors
+
+        [Browsable(false)]
         public Model Mesh { get; set; }
+
+        [Browsable(false)]
         public Effect Shader { get; set; }
-        public Vector3 Position { get => m_position; set { m_position = value; } }
-        public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
-        public float Scale { get; set; }
+
+        [Browsable(false)]
+        public Texture Texture { get; set; }
+
+        private TextureVal _textureVal;
+
+        [Category("Appearance")]
+        [TypeConverter(typeof(TextureValConverter))]
+        public string DiffuseTexture
+        {
+            get {
+                  if(_textureVal == TextureVal.Metal)
+                  {
+                    return "Metal";
+                  }
+                  else if(_textureVal == TextureVal.Grass)
+                  {
+                    return "Grass";
+                  }
+                  else if(_textureVal == TextureVal.HeightMap)
+                  {
+                    return "HeightMap";
+                  }
+                return "Metal";
+
+            }
+            set
+            {
+                if(value == TextureVal.Metal.ToString()) 
+                {
+                    _textureVal = TextureVal.Metal;
+
+                }
+                else if (value == TextureVal.Grass.ToString())
+                {
+                    _textureVal = TextureVal.Grass;
+
+                }
+                else 
+                {
+                    _textureVal = TextureVal.HeightMap;
+
+                }
+                OnPropertyChanged("DiffuseTexture");
+            }
+        }
+
+
+
+        /*
+        public class DiffuseTextureConverter : StringConverter
+        {
+            public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+            {
+                return true;
+            }
+
+            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+            {
+                return new StandardValuesCollection(new List<string> { "Metal", "Grass", "HeightMap" });
+            }
+        }
+
+        [Category("Appearance")]
+        [TypeConverter(typeof(DiffuseTextureConverter))]
+        public string DiffuseTexture { get; set; }
+        */
+
+        [Category("State")]
         public bool Selected {  get; set; } = false;
 
-        // Texturing
-        public Texture Texture { get; set; }
+
+
+        [Category("Transformation")]
+        public Vector3 Position { get => m_position; set { m_position = value; } }
+
+        [Category("Transformation")]
+
+        public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
+
+        [Category("Transformation")]
+        public float Scale { get; set; }
 
         //Members
         private Vector3 m_position;
