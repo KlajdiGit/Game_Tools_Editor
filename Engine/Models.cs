@@ -5,10 +5,11 @@ using Microsoft.Xna.Framework.Content;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
+using System.ComponentModel;
 
 namespace Game_Tools_Week4_Editor
 {
-    class Models : ISerializable
+    class Models : ISerializable, INotifyPropertyChanged
     {
         // Accessors
         public Model Mesh { get; set; }
@@ -24,6 +25,13 @@ namespace Game_Tools_Week4_Editor
         //Members
         private Vector3 m_position;
         private Vector3 m_rotation;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Models()
         {

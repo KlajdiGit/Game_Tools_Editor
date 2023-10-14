@@ -7,6 +7,9 @@ using Editor.Engine.Interfaces;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using System.Windows.Forms;
+using Game_Tools_Week4_Editor.Editor;
+using System;
+using System.Diagnostics;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -17,7 +20,7 @@ namespace Game_Tools_Week4_Editor
 
         //Members
         private List<Models> m_models = new();
-        private Camera m_camera = new(new Vector3(0, 2, 2), 16 / 9);
+        private Camera m_camera = new(new Vector3(0, 0, -20), 16 / 9);
 
         public Level()
         {
@@ -26,11 +29,10 @@ namespace Game_Tools_Week4_Editor
 
         public void LoadContent(ContentManager _content)
         {
-            Models teapot = new(_content, "Teapot" , "Metal", "MyShader", Vector3.Zero, 1.0f);
+            Models teapot = new(_content, "Teapot" , "Metal", "MyShader", Vector3.Zero, 15.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
             AddModel(teapot);
-            teapot = new(_content, "Teapot", "Metal", "MyShader", new Vector3(1, 0, 0), 1.0f);
-            AddModel(teapot);
+            
         }
 
         public void AddModel(Models _model)
@@ -171,6 +173,7 @@ namespace Game_Tools_Week4_Editor
                         if(f.HasValue)
                         {
                             model.Selected = true;
+                            GameEditor.Dirty = true;
                         }
                     }
                 }
@@ -179,10 +182,10 @@ namespace Game_Tools_Week4_Editor
 
         public void Update(float _delta)
         {
+            HandlePick();
             HandleTranslate();
             HandleRotate(_delta);
             HandleScale(_delta);
-            HandlePick();
         }
 
         public void Serialize(BinaryWriter _stream)

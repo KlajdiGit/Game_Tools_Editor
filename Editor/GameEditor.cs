@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Editor.Engine;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Game_Tools_Week4_Editor.Editor
 {
@@ -18,6 +20,9 @@ namespace Game_Tools_Week4_Editor.Editor
         private FontController m_fonts;
         RasterizerState m_rasterState = new RasterizerState();
         DepthStencilState m_depthStencilState = new DepthStencilState();
+
+        private bool _dirty = false;
+        public static bool Dirty { get; set; }
 
         public GameEditor()
         {
@@ -57,6 +62,38 @@ namespace Game_Tools_Week4_Editor.Editor
             m_fonts.LoadContent(Content);
         }
 
+        /*   protected override void Update(GameTime _gameTime)
+           {
+               if (Project != null)
+               {
+                   Project.Update((float)(_gameTime.ElapsedGameTime.TotalMilliseconds / 1000));
+                   InputController.Instance.Clear();
+                   var models = Project.CurrentLevel.GetSelectedModels();
+
+                   if (GameEditor.Dirty)
+                   {
+
+                       if (models.Count == 0)
+                       {
+                           m_parent.propertyGrid.SelectedObject = null;
+                       }
+                       else if (models.Count > 1)
+                       {
+                           m_parent.propertyGrid.SelectedObjects = models.ToArray();
+                       }
+                       else
+                       {
+                           m_parent.propertyGrid.SelectedObject = models[0];
+                       }
+                       GameEditor.Dirty = false;
+
+                   }
+
+               }
+               base.Update(_gameTime);
+           }*/
+
+
         protected override void Update(GameTime _gameTime)
         {
             if (Project != null)
@@ -65,21 +102,42 @@ namespace Game_Tools_Week4_Editor.Editor
                 InputController.Instance.Clear();
                 var models = Project.CurrentLevel.GetSelectedModels();
 
-                if (models.Count == 0)
+                if (GameEditor.Dirty)
                 {
-                    m_parent.propertyGrid.SelectedObject = null;
-                }
-                else if (models.Count > 1)
-                {
-                    m_parent.propertyGrid.SelectedObjects = models.ToArray();
-                }
-                else
-                {
-                    m_parent.propertyGrid.SelectedObject = models[0];
+                    if (m_parent.propertyGrid.SelectedObject is Models oldModel)
+                    {
+                        oldModel.PropertyChanged -= Model_PropertyChanged;
+                    }
+
+                    if (models.Count == 0)
+                    {
+                        m_parent.propertyGrid.SelectedObject = null;
+                    }
+                    else if (models.Count > 1)
+                    {
+                        m_parent.propertyGrid.SelectedObjects = models.ToArray();
+                        foreach (var model in models)
+                        {
+                            model.PropertyChanged += Model_PropertyChanged;
+                        }
+                    }
+                    else
+                    {
+                        m_parent.propertyGrid.SelectedObject = models[0];
+                        models[0].PropertyChanged += Model_PropertyChanged;
+                    }
+
+                    GameEditor.Dirty = false;
                 }
             }
             base.Update(_gameTime);
         }
+
+        void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            m_parent.propertyGrid.Refresh();
+        }
+
 
         protected override void Draw(GameTime gameTime)
         {
