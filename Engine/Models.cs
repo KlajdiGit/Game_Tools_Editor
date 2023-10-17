@@ -28,7 +28,8 @@ namespace Game_Tools_Week4_Editor
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            return new StandardValuesCollection(new List<string> { "Metal", "Grass", "HeightMap" });
+            return new StandardValuesCollection(new List <string>{ TextureVal.Metal.ToString(), TextureVal.Grass.ToString(), TextureVal.HeightMap.ToString() });
+
         }
     }
 

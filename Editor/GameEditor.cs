@@ -102,7 +102,7 @@ namespace Game_Tools_Week4_Editor.Editor
                 InputController.Instance.Clear();
                 var models = Project.CurrentLevel.GetSelectedModels();
 
-                if (GameEditor.Dirty)
+                if (Dirty)
                 {
                     if (m_parent.propertyGrid.SelectedObject is Models oldModel)
                     {
