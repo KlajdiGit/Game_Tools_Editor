@@ -29,7 +29,7 @@ namespace Game_Tools_Week4_Editor
 
         public void LoadContent(ContentManager _content)
         {
-            Models teapot = new(_content, "Teapot" , "Metal", "MyShader", Vector3.Zero, 15.0f);
+            Models teapot = new(_content, "Teapot" , /*"Heightmap",*/ "MyShader", Vector3.Zero, 15.0f);
             teapot.SetShader(_content.Load<Effect>("MyShader"));
             AddModel(teapot);
             

@@ -11,13 +11,6 @@ using System.Collections.Generic;
 namespace Game_Tools_Week4_Editor
 {
 
-    public enum TextureVal
-    {
-        Metal,
-        Grass,
-        HeightMap
-
-    }
 
     public class TextureValConverter : StringConverter
     {
@@ -28,7 +21,7 @@ namespace Game_Tools_Week4_Editor
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            return new StandardValuesCollection(new List <string>{ TextureVal.Metal.ToString(), TextureVal.Grass.ToString(), TextureVal.HeightMap.ToString() });
+            return new StandardValuesCollection(new List <string>{"Metal", "Grass", "HeightMap"});
 
         }
     }
@@ -45,88 +38,68 @@ namespace Game_Tools_Week4_Editor
         [Browsable(false)]
         public Texture Texture { get; set; }
 
-        private TextureVal _textureVal;
-
         [Category("Appearance")]
         [TypeConverter(typeof(TextureValConverter))]
+        [Description("Diffuse texture of the model.")]
         public string DiffuseTexture
         {
-            get {
-                  if(_textureVal == TextureVal.Metal)
-                  {
+            get 
+            {
+                if (m_diffuseTexture == null)
                     return "Metal";
-                  }
-                  else if(_textureVal == TextureVal.Grass)
-                  {
-                    return "Grass";
-                  }
-                  else if(_textureVal == TextureVal.HeightMap)
-                  {
-                    return "HeightMap";
-                  }
-                return "Metal";
 
+                return m_diffuseTexture;
             }
             set
             {
-                if(value == TextureVal.Metal.ToString()) 
+                if(value == "HeightMap") 
                 {
-                    _textureVal = TextureVal.Metal;
+                    m_diffuseTexture = value;
 
                 }
-                else if (value == TextureVal.Grass.ToString())
+                else if (value == "Grass")
                 {
-                    _textureVal = TextureVal.Grass;
+                    m_diffuseTexture = value;
 
                 }
                 else 
                 {
-                    _textureVal = TextureVal.HeightMap;
+                    //Set Metal as the default texture
+                    m_diffuseTexture = "Metal";
 
                 }
+
+                Texture = m_content.Load<Texture>(m_diffuseTexture);
+                Texture.Tag = DiffuseTexture;
                 OnPropertyChanged("DiffuseTexture");
             }
         }
 
 
 
-        /*
-        public class DiffuseTextureConverter : StringConverter
-        {
-            public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
-            {
-                return true;
-            }
-
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-            {
-                return new StandardValuesCollection(new List<string> { "Metal", "Grass", "HeightMap" });
-            }
-        }
-
-        [Category("Appearance")]
-        [TypeConverter(typeof(DiffuseTextureConverter))]
-        public string DiffuseTexture { get; set; }
-        */
-
         [Category("State")]
+        [Description("Selection status.")]
         public bool Selected {  get; set; } = false;
 
-
-
         [Category("Transformation")]
+        [Description("Position of the model in world space.")]
         public Vector3 Position { get => m_position; set { m_position = value; } }
 
         [Category("Transformation")]
-
+        [Description("Rotation of the model.")]
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
 
         [Category("Transformation")]
+        [Description("Scale of the model.")]
         public float Scale { get; set; }
+
 
         //Members
         private Vector3 m_position;
         private Vector3 m_rotation;
+        private ContentManager m_content;
+        private string m_diffuseTexture;
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -139,27 +112,30 @@ namespace Game_Tools_Week4_Editor
         {
         }
 
+
+       
         public Models( ContentManager _content,
                        string _model, 
-                       string _texture,
+                       //string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
         {
-            Create(_content, _model, _texture, _effect, _position, _scale);
+            m_content = _content;
+            Create(_content, _model, /*_texture,*/ _effect, _position, _scale);
         }
 
         public void Create(ContentManager _content,
                        string _model,
-                       string _texture,
+                      // string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
         {
             Mesh = _content.Load<Model>( _model );
             Mesh.Tag = _model;
-            Texture = _content.Load<Texture>( _texture );
-            Texture.Tag = _texture;
+            Texture = _content.Load<Texture>( DiffuseTexture);
+            Texture.Tag = DiffuseTexture;
             Shader = _content.Load<Effect>( _effect );
             Shader.Tag = _effect;
             SetShader(Shader);
@@ -239,7 +215,7 @@ namespace Game_Tools_Week4_Editor
             Position = HelperDeserialize.Vec3(_stream);
             Rotation = HelperDeserialize.Vec3(_stream);
             Scale = _stream.ReadSingle();
-            Create(_content, mesh, texture, shader, Position, Scale);
+            Create(_content, mesh, /*texture*/ shader, Position, Scale);
         }
     }
 }
