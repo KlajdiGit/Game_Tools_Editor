@@ -21,7 +21,6 @@ namespace Game_Tools_Week4_Editor.Editor
         RasterizerState m_rasterState = new RasterizerState();
         DepthStencilState m_depthStencilState = new DepthStencilState();
 
-        private bool _dirty = false;
         public static bool Dirty { get; set; }
 
         public GameEditor()

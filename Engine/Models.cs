@@ -38,6 +38,9 @@ namespace Game_Tools_Week4_Editor
         [Browsable(false)]
         public Texture Texture { get; set; }
 
+        private ContentManager m_content;
+        private string m_diffuseTexture;
+
         [Category("Appearance")]
         [TypeConverter(typeof(TextureValConverter))]
         [Description("Diffuse texture of the model.")]
@@ -97,8 +100,7 @@ namespace Game_Tools_Week4_Editor
         //Members
         private Vector3 m_position;
         private Vector3 m_rotation;
-        private ContentManager m_content;
-        private string m_diffuseTexture;
+       
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -116,18 +118,16 @@ namespace Game_Tools_Week4_Editor
        
         public Models( ContentManager _content,
                        string _model, 
-                       //string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
         {
             m_content = _content;
-            Create(_content, _model, /*_texture,*/ _effect, _position, _scale);
+            Create(_content, _model, _effect, _position, _scale);
         }
 
         public void Create(ContentManager _content,
                        string _model,
-                      // string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
