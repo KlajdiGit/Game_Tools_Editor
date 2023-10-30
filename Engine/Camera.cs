@@ -11,7 +11,7 @@ namespace Game_Tools_Week4_Editor
     internal class Camera : ISerializable
     {
         public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
-        public Vector3 Target { get; set; } = new Vector3(0, 0, 0);
+        public Vector3 Target { get; set; } = new Vector3(300, 0, 0);
         public Matrix View { get; set; } = Matrix.Identity;
         public Matrix Projection { get; set; } = Matrix.Identity;
         public float NearPlane { get; set; } = 0.1f;
@@ -78,7 +78,7 @@ namespace Game_Tools_Week4_Editor
 
         public void Serialize(BinaryWriter _stream)
         {
-            HelperSerialize.Vec3(_stream, Position);
+            HelpSerialize.Vec3(_stream, Position);
             _stream.Write(NearPlane);
             _stream.Write(FarPlane);
             _stream.Write(AspectRatio);
@@ -86,7 +86,7 @@ namespace Game_Tools_Week4_Editor
 
         public void Deserialize(BinaryReader _stream, ContentManager _content)
         {
-            Position = HelperDeserialize.Vec3(_stream);
+            Position = HelpDeserialize.Vec3(_stream);
             NearPlane = _stream.ReadSingle();
             FarPlane = _stream.ReadSingle();    
             AspectRatio = _stream.ReadSingle();

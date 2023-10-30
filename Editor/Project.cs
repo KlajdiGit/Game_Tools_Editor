@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
 using Editor.Engine.Interfaces;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Game_Tools_Week4_Editor.Editor
 {
@@ -21,7 +22,7 @@ namespace Game_Tools_Week4_Editor.Editor
         public Project()
         {
         }
-        public Project(ContentManager _content, string _name)
+        public Project(GraphicsDevice _device, ContentManager _content, string _name)
         {
             Folder = Path.GetDirectoryName(_name);
             Name = Path.GetFileName(_name);
@@ -31,13 +32,13 @@ namespace Game_Tools_Week4_Editor.Editor
             }
 
             // Add aa default level
-            AddLevel(_content);
+            AddLevel(_device ,_content);
         }
 
-        public void AddLevel(ContentManager _content)
+        public void AddLevel(GraphicsDevice _device, ContentManager _content)
         {
             CurrentLevel = new();
-            CurrentLevel.LoadContent(_content);
+            CurrentLevel.LoadContent(_device, _content);
             Levels.Add(CurrentLevel);
         }
 
