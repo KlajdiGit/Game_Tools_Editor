@@ -5,10 +5,11 @@ using Microsoft.Xna.Framework.Content;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
+using Game_Tools_Week4_Editor.Engine.Interfaces;
 
 namespace Game_Tools_Week4_Editor
 {
-    class Models : ISerializable
+    class Models : ISerializable, ISelectable
     {
         // Accessors
         public Model Mesh { get; set; }
