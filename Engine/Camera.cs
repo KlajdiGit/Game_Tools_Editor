@@ -5,6 +5,7 @@ using Game_Tools_Week4_Editor;
 using Microsoft.Xna.Framework;
 using Editor.Engine.Interfaces;
 using Editor.Engine;
+using Game_Tools_Week4_Editor.Editor;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -84,7 +85,7 @@ namespace Game_Tools_Week4_Editor
             _stream.Write(AspectRatio);
         }
 
-        public void Deserialize(BinaryReader _stream, ContentManager _content)
+        public void Deserialize(BinaryReader _stream, GameEditor _game)
         {
             Position = HelpDeserialize.Vec3(_stream);
             NearPlane = _stream.ReadSingle();

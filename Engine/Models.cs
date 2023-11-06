@@ -6,6 +6,7 @@ using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
 using Game_Tools_Week4_Editor.Engine.Interfaces;
+using Game_Tools_Week4_Editor.Editor;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -17,7 +18,20 @@ namespace Game_Tools_Week4_Editor
         public Vector3 Position { get => m_position; set { m_position = value; } }
         public Vector3 Rotation { get => m_rotation; set { m_rotation = value; } }
         public float Scale { get; set; }
-        public bool Selected {  get; set; } = false;
+        public bool Selected
+        { 
+            get { return m_selected; } 
+            set
+            {
+                if(m_selected != value)
+                {
+                    m_selected = value;
+                    SelectedDirty = true;
+                }
+            }
+        }
+        public static bool SelectedDirty { get; set; } = false;
+
 
         // Texturing
         public Texture Texture { get; set; }
@@ -25,33 +39,48 @@ namespace Game_Tools_Week4_Editor
         //Members
         private Vector3 m_position;
         private Vector3 m_rotation;
+        private bool m_selected;
 
         public Models()
         {
         }
 
-        public Models( ContentManager _content,
+        public Models( GameEditor _game,
                        string _model, 
                        string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
         {
-            Create(_content, _model, _texture, _effect, _position, _scale);
+            Create(_game, _model, _texture, _effect, _position, _scale);
         }
 
-        public void Create(ContentManager _content,
+        public void Create(GameEditor _game,
                        string _model,
                        string _texture,
                        string _effect,
                        Vector3 _position,
                        float _scale)
         {
-            Mesh = _content.Load<Model>( _model );
+            Mesh = _game.Content.Load<Model>( _model );
             Mesh.Tag = _model;
-            Texture = _content.Load<Texture>( _texture );
+            if(_texture == "DefaultTexture")
+            {
+                Texture = _game.DefaultTexture;
+            }
+            else
+            {
+                Texture = _game.Content.Load<Texture>( _texture );
+            }
             Texture.Tag = _texture;
-            Shader = _content.Load<Effect>( _effect );
+            if(_effect == "DefaultEffect")
+            {
+                Shader = _game.DefaultEffect;
+            }
+            else
+            {
+                Shader = _game.Content.Load<Effect>( _effect );
+            }
             Shader.Tag = _effect;
             SetShader(Shader);
             m_position = _position;
@@ -122,7 +151,7 @@ namespace Game_Tools_Week4_Editor
             _stream.Write(Scale);
         }
 
-        public void Deserialize(BinaryReader _stream, ContentManager _content)
+        public void Deserialize(BinaryReader _stream, GameEditor _game)
         {
             string mesh = _stream.ReadString();
             string texture = _stream.ReadString();
@@ -130,7 +159,7 @@ namespace Game_Tools_Week4_Editor
             Position = HelpDeserialize.Vec3(_stream);
             Rotation = HelpDeserialize.Vec3(_stream);
             Scale = _stream.ReadSingle();
-            Create(_content, mesh, texture, shader, Position, Scale);
+            Create(_game, mesh, texture, shader, Position, Scale);
         }
     }
 }

@@ -10,7 +10,8 @@ namespace Game_Tools_Week4_Editor.Editor
     public class GameEditor : Game
     {
         internal Project Project { get; set; }
-        
+        internal Texture DefaultTexture { get; set; }
+        internal Effect DefaultEffect { get; set; }
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch _spriteBatch;
         private FormEditor  m_parent;
@@ -55,8 +56,28 @@ namespace Game_Tools_Week4_Editor.Editor
             m_spriteBatch = new(GraphicsDevice);
             m_fonts = new();
             m_fonts.LoadContent(Content);
+            DefaultTexture = Content.Load<Texture>("DefaultTexture");
+            DefaultEffect = Content.Load<Effect>("DefaultShader");
         }
 
+        private void UpdateSelected()
+        {
+            var models = Project.CurrentLevel.GetSelectedModels();
+
+            if (models.Count == 0)
+            {
+                m_parent.propertyGrid.SelectedObject = null;
+            }
+            else if (models.Count > 1)
+            {
+                m_parent.propertyGrid.SelectedObjects = models.ToArray();
+            }
+            else
+            {
+                m_parent.propertyGrid.SelectedObject = models[0];
+            }
+
+        }
         protected override void Update(GameTime _gameTime)
         {
             if (Project != null)
@@ -64,20 +85,7 @@ namespace Game_Tools_Week4_Editor.Editor
                 Content.RootDirectory = Project.ContentFolder + "\\bin";
                 Project.Update((float)(_gameTime.ElapsedGameTime.TotalMilliseconds / 1000));
                 InputController.Instance.Clear();
-                var models = Project.CurrentLevel.GetSelectedModels();
-
-                if (models.Count == 0)
-                {
-                    m_parent.propertyGrid.SelectedObject = null;
-                }
-                else if (models.Count > 1)
-                {
-                    m_parent.propertyGrid.SelectedObjects = models.ToArray();
-                }
-                else
-                {
-                    m_parent.propertyGrid.SelectedObject = models[0];
-                }
+                UpdateSelected();
             }
             base.Update(_gameTime);
         }
