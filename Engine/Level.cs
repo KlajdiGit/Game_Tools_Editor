@@ -7,6 +7,8 @@ using Editor.Engine.Interfaces;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using System.Windows.Forms;
+using Editor.Engine;
+using Game_Tools_Week4_Editor.Engine.Interfaces;
 
 namespace Game_Tools_Week4_Editor
 {
@@ -17,20 +19,19 @@ namespace Game_Tools_Week4_Editor
 
         //Members
         private List<Models> m_models = new();
-        private Camera m_camera = new(new Vector3(0, 2, 2), 16 / 9);
+        private Camera m_camera = new(new Vector3(0, 400, 500), 16 / 9);
+        private Effect m_terrainEffect = null;
+        private Terrain m_terrain = null;
 
         public Level()
         {
             
         }
 
-        public void LoadContent(ContentManager _content)
+        public void LoadContent(GraphicsDevice _device, ContentManager _content)
         {
-            Models teapot = new(_content, "Teapot" , "Metal", "MyShader", Vector3.Zero, 1.0f);
-            teapot.SetShader(_content.Load<Effect>("MyShader"));
-            AddModel(teapot);
-            teapot = new(_content, "Teapot", "Metal", "MyShader", new Vector3(1, 0, 0), 1.0f);
-            AddModel(teapot);
+            m_terrainEffect = _content.Load<Effect>("TerrainEffect");
+            m_terrain = new(_content.Load<Texture2D>("HeightMap"), _content.Load<Texture2D>("Grass"), 200, _device);
         }
 
         public void AddModel(Models _model)
@@ -38,13 +39,14 @@ namespace Game_Tools_Week4_Editor
             m_models.Add(_model);
         }
 
-        public List<Models> GetSelectedModels()
+        public List<ISelectable> GetSelectedModels()
         {
-            List<Models> models = new List<Models>();
+            List<ISelectable> models = new();
             foreach (var model in m_models)
             {
                 if(model.Selected) models.Add(model);
             }
+            if(m_terrain.Selected) models.Add(m_terrain);
             return models;
         }
 
@@ -54,6 +56,7 @@ namespace Game_Tools_Week4_Editor
             {
                 m.Render(m_camera.View, m_camera.Projection);
             }
+            m_terrain.Draw(m_terrainEffect, m_camera.View, m_camera.Projection);
         }
 
         private void HandleTranslate()
@@ -156,23 +159,39 @@ namespace Game_Tools_Week4_Editor
 
         private void HandlePick()
         {
+            float? f;
+            Matrix transform = Matrix.Identity;
             InputController ic = InputController.Instance;
             if(ic.IsButtonDown(MouseButtons.Left))
             {
-                Ray r = ic.GetPickRay(m_camera);
+                Ray r = HelpMath.GetPickRay(ic.MousePosition, m_camera);
                 foreach(Models model in m_models)
                 {
-                    model.Selected = false; 
+                    model.Selected = false;
+                    transform = model.GetTransform();
                     foreach(ModelMesh mesh in model.Mesh.Meshes)
                     {
                         BoundingSphere s = mesh.BoundingSphere;
-                        s = s.Transform(model.GetTransform());
-                        float? f = r.Intersects(s);
+                        s.Transform(ref transform, out s);
+                        f = r.Intersects(s);
                         if(f.HasValue)
                         {
-                            model.Selected = true;
+                            f = HelpMath.PickTriangle(in mesh, ref r, ref transform);
+                            if (f.HasValue)
+                            {
+                                model.Selected = true;
+                            }
                         }
                     }
+                }
+
+                // Check terrain
+                transform = Matrix.Identity;
+                f = HelpMath.PickTriangle(in m_terrain, ref r, ref transform);
+                m_terrain.Selected = false;
+                if(f.HasValue)
+                {
+                    m_terrain.Selected = true;
                 }
             }
         }

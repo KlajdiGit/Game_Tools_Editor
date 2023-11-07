@@ -1,14 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Editor.Engine.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using System.IO;
 using Game_Tools_Week4_Editor;
 using Editor.Engine;
+using Game_Tools_Week4_Editor.Engine.Interfaces;
+using Microsoft.Xna.Framework;
 
 namespace Game_Tools_Week4_Editor
 {
-    class Models : ISerializable
+    class Models : ISerializable, ISelectable
     {
         // Accessors
         public Model Mesh { get; set; }
@@ -116,8 +117,8 @@ namespace Game_Tools_Week4_Editor
             _stream.Write(Mesh.Tag.ToString());
             _stream.Write(Texture.Tag.ToString());
             _stream.Write(Shader.Tag.ToString());
-            HelperSerialize.Vec3(_stream, Position);
-            HelperSerialize.Vec3(_stream, Rotation);
+            HelpSerialize.Vec3(_stream, Position);
+            HelpSerialize.Vec3(_stream, Rotation);
             _stream.Write(Scale);
         }
 
@@ -126,8 +127,8 @@ namespace Game_Tools_Week4_Editor
             string mesh = _stream.ReadString();
             string texture = _stream.ReadString();
             string shader = _stream.ReadString();
-            Position = HelperDeserialize.Vec3(_stream);
-            Rotation = HelperDeserialize.Vec3(_stream);
+            Position = HelpDeserialize.Vec3(_stream);
+            Rotation = HelpDeserialize.Vec3(_stream);
             Scale = _stream.ReadSingle();
             Create(_content, mesh, texture, shader, Position, Scale);
         }
