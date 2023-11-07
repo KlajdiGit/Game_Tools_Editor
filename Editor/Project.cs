@@ -46,13 +46,11 @@ namespace Game_Tools_Week4_Editor.Editor
                 Directory.CreateDirectory(ContentFolder);
                 Directory.CreateDirectory(AssetFolder);
                 Directory.CreateDirectory(ObjectFolder);
+
                 File.Copy($"ContentTemplate.mgcb", ContentFolder + $"{d}Content.mgcb");
             }
             AssetMonitor = new(ObjectFolder);
-            AssetMonitor.OnAssetsUpdated += AssetMon_OnAssetsUpdated;
-
-            // Add aa default level
-            AddLevel(_device ,_content);
+            AssetMonitor.OnAssetsUpdated += AssetMon_OnAssetsUpdated; ;
         }
 
         private void AssetMon_OnAssetsUpdated()
