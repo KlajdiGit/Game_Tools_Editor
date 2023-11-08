@@ -199,8 +199,6 @@ namespace Game_Tools_Week4_Editor
                 //Check terrain
                 if (m_terrain != null)
                 {
-
-
                     transform = Matrix.Identity;
                     f = HelpMath.PickTriangle(in m_terrain, ref r, ref transform);
                     m_terrain.Selected = false;

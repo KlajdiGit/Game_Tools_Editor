@@ -16,7 +16,7 @@ namespace Game_Tools_Week4_Editor.Editor
         private SpriteBatch _spriteBatch;
         private FormEditor  m_parent;
         private SpriteBatch m_spriteBatch;
-        //private FontController m_fonts;
+        private FontController m_fonts;
         RasterizerState m_rasterState = new RasterizerState();
         DepthStencilState m_depthStencilState = new DepthStencilState();
 
@@ -62,21 +62,24 @@ namespace Game_Tools_Week4_Editor.Editor
 
         private void UpdateSelected()
         {
-            var models = Project.CurrentLevel.GetSelectedModels();
+            if (Models.SelectedDirty)
+            {
+                var models = Project.CurrentLevel.GetSelectedModels();
 
-            if (models.Count == 0)
-            {
-                m_parent.propertyGrid.SelectedObject = null;
+                if (models.Count == 0)
+                {
+                    m_parent.propertyGrid.SelectedObject = null;
+                }
+                else if (models.Count > 1)
+                {
+                    m_parent.propertyGrid.SelectedObjects = models.ToArray();
+                }
+                else
+                {
+                    m_parent.propertyGrid.SelectedObject = models[0];
+                }
             }
-            else if (models.Count > 1)
-            {
-                m_parent.propertyGrid.SelectedObjects = models.ToArray();
-            }
-            else
-            {
-                m_parent.propertyGrid.SelectedObject = models[0];
-            }
-
+            Models.SelectedDirty = false;
         }
         protected override void Update(GameTime _gameTime)
         {
