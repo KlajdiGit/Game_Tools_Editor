@@ -16,7 +16,7 @@ namespace Game_Tools_Week4_Editor.Editor
         private SpriteBatch _spriteBatch;
         private FormEditor  m_parent;
         private SpriteBatch m_spriteBatch;
-        private FontController m_fonts;
+        //private FontController m_fonts;
         RasterizerState m_rasterState = new RasterizerState();
         DepthStencilState m_depthStencilState = new DepthStencilState();
 
